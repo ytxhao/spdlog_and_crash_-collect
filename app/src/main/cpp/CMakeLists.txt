@@ -9,6 +9,7 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project("spdlog_and_crash_collect")
 
+add_subdirectory(spdlog)
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -42,7 +43,7 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
-
+                        spdlog::spdlog
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )

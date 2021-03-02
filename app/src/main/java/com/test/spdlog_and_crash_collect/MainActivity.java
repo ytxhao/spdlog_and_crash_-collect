@@ -3,6 +3,8 @@ package com.test.spdlog_and_crash_collect;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,15 +18,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        String logPath = "";
+        if (getExternalFilesDir("ams") != null) {
+            logPath = getExternalFilesDir("ams").getAbsolutePath()+"/ams_rotating.txt";
+        }
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+        Log.d("MainActivity","logPath="+logPath);
+        tv.setText(stringFromJNI(logPath));
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+    public native String stringFromJNI(String filePath);
 }
