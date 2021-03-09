@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -24,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
         }
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
+        Button bt = findViewById(R.id.sample_bt);
         Log.d("MainActivity","logPath="+logPath);
         tv.setText(stringFromJNI(logPath));
+        bt.setOnClickListener(this);
     }
 
     /**
@@ -33,4 +38,10 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI(String filePath);
+    public native String nativeOnClick();
+
+    @Override
+    public void onClick(View v) {
+        nativeOnClick();
+    }
 }

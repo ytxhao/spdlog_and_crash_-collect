@@ -27,7 +27,7 @@ Java_com_test_spdlog_1and_1crash_1collect_MainActivity_stringFromJNI(
     file_sink->set_pattern("%Y-%m-%d %H:%M:%S.%e %P-%t %L: %v");
     file_sink->set_level(spdlog::level::debug);
 
-    auto android_sink = std::make_shared<spdlog::sinks::android_sink_mt>(tag);
+    auto android_sink = std::make_shared<spdlog::sinks::android_sink_mt>(tag, true);
     android_sink->set_pattern("%v");
     android_sink->set_level(spdlog::level::debug);
 
@@ -44,4 +44,12 @@ Java_com_test_spdlog_1and_1crash_1collect_MainActivity_stringFromJNI(
     spdlog::info("{} stringFromJNI path: {}",TAG,hello.c_str());
 
     return env->NewStringUTF(hello.c_str());
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_test_spdlog_1and_1crash_1collect_MainActivity_nativeOnClick(
+        JNIEnv* env,
+        jobject obj) {
+    spdlog::info("{} nativeOnClick 123",TAG);
+    return env->NewStringUTF("click");
 }
