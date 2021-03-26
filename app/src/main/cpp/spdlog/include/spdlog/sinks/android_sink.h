@@ -10,7 +10,7 @@
 #include <spdlog/details/os.h>
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/details/synchronous_factory.h>
-
+#include <spdlog/cfg/helpers-inl.h>
 #include <android/log.h>
 #include <chrono>
 #include <mutex>
@@ -50,22 +50,30 @@ protected:
             base_sink<Mutex>::formatter_->format(msg, formatted);
         }
         formatted.push_back('\0');
-        const char *msg_output = formatted.data();
-
+//        const char *msg_output = formatted.data();
+        char *msg_output = formatted.data();
+        char *save_output_ptr = nullptr;
+        const char *tag = strtok_r(msg_output, ":", &save_output_ptr);
+        if (tag == nullptr) {
+            tag = tag_.c_str();
+        }
+        std::string str_log(save_output_ptr == nullptr ? "" : save_output_ptr);
+        str_log =  spdlog::cfg::helpers::trim_(str_log);
+        __android_log_write(priority, tag, str_log.c_str());
         // See system/core/liblog/logger_write.c for explanation of return value
-        int ret = __android_log_write(priority, tag_.c_str(), msg_output);
-        int retry_count = 0;
-        while ((ret == -11 /*EAGAIN*/) && (retry_count < SPDLOG_ANDROID_RETRIES))
-        {
-            details::os::sleep_for_millis(5);
-            ret = __android_log_write(priority, tag_.c_str(), msg_output);
-            retry_count++;
-        }
-
-        if (ret < 0)
-        {
-            throw_spdlog_ex("__android_log_write() failed", ret);
-        }
+//        int ret = __android_log_write(priority, tag_.c_str(), msg_output);
+//        int retry_count = 0;
+//        while ((ret == -11 /*EAGAIN*/) && (retry_count < SPDLOG_ANDROID_RETRIES))
+//        {
+//            details::os::sleep_for_millis(5);
+//            ret = __android_log_write(priority, tag_.c_str(), msg_output);
+//            retry_count++;
+//        }
+//
+//        if (ret < 0)
+//        {
+//            throw_spdlog_ex("__android_log_write() failed", ret);
+//        }
     }
 
     void flush_() override {}

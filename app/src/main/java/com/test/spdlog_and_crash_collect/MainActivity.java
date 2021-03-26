@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
         String logPath = "";
         if (getExternalFilesDir("ams") != null) {
-            logPath = getExternalFilesDir("ams").getAbsolutePath()+"/ams_rotating.txt";
+            logPath = getExternalFilesDir("ams").getAbsolutePath();
         }
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
