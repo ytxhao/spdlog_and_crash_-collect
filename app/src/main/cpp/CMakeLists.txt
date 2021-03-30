@@ -14,13 +14,16 @@ add_subdirectory(spdlog)
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
-
+set(LINK_DIR "${PROJECT_SOURCE_DIR}/../native-libs/${ANDROID_ABI}")
+include_directories(${PROJECT_SOURCE_DIR}/openssl/include)
+file(GLOB CPP_FILES_IN_OPENSSL "${PROJECT_SOURCE_DIR}/openssl/src/*.cpp")
+#message(FATAL_ERROR ${PROJECT_SOURCE_DIR}/openssl)
 add_library( # Sets the name of the library.
              native-lib
 
              # Sets the library as a shared library.
              SHARED
-
+            ${CPP_FILES_IN_OPENSSL}
              # Provides a relative path to your source file(s).
              native-lib.cpp )
 
@@ -41,9 +44,11 @@ find_library( # Sets the name of the path variable.
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
-target_link_libraries( # Specifies the target library.
-                       native-lib
+target_link_libraries(  # Specifies the target library.
+                        native-lib
                         spdlog::spdlog
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
+                        ${LINK_DIR}/libssl.a
+                        ${LINK_DIR}/libcrypto.a
+                        # Links the target library to the log library
+                        # included in the NDK.
+                        ${log-lib} )

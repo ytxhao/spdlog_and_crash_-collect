@@ -22,7 +22,7 @@ void init_spdlog(const std::string &path) {
     }
     spdlog::set_level(spdlog::level::debug);
     std::string normal_file = path + "/normal/ams_normal_rotating.txt";
-    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(normal_file, 1024 * 1024 * 5, 3);
+    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(normal_file, 1024 * 1024 * 5, 3, true);
     file_sink->set_pattern("%Y-%m-%d %H:%M:%S.%e %P-%t %L/%v");
 
     auto android_sink = std::make_shared<spdlog::sinks::android_sink_mt>("", true);
@@ -40,11 +40,11 @@ void init_spdlog(const std::string &path) {
 
     spdlog_reset_av_print_last_time();
     std::string audio_file = path + "/av/ams_audio_rotating.txt";
-    audio_logger = spdlog::rotating_logger_mt("audio_logger", audio_file, 1024 * 1024 * 5, 3);
+    audio_logger = spdlog::rotating_logger_mt("audio_logger", audio_file, 1024 * 1024 * 5, 3 , true);
     audio_logger->set_pattern("%Y-%m-%d %H:%M:%S.%e %P-%t %L/%v");
 
     std::string video_file = path + "/av/ams_video_rotating.txt";
-    video_logger = spdlog::rotating_logger_mt("video_logger", video_file, 1024 * 1024 * 5, 3);
+    video_logger = spdlog::rotating_logger_mt("video_logger", video_file, 1024 * 1024 * 5, 3, true);
     video_logger->set_pattern("%Y-%m-%d %H:%M:%S.%e %P-%t %L/%v");
 
     isInit = true;
